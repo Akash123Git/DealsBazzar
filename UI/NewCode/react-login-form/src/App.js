@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import Dashboard from "./dashboard/Dashboard";
+import UserBids from "./BidUserComponent/UserBids"
 import Product from "./ProductComponent/Product";
 import MyBid from "./BidComponent/MyBid";
 import Store from "./Redux/Store";
@@ -35,6 +36,8 @@ export default class App extends React.Component {
         {/*     <Route path='/Contact' element={<Contact/>} /> */}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/myprofile" element={<Profile />} />
+        <Route path="/mybids" element={<UserBids />} />
+        
       </Routes>
 
     );

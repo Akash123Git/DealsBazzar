@@ -78,12 +78,19 @@ public class BidController {
         List<Bid> bidList = bidService.getBids();
         GlobalData.bids = bidList;
         List<Bid> b = new ArrayList<Bid>();
-        for (Product p : GlobalData.products) {
-            for (Bid bid : bidList) {
-                for (SystemUser user : userList) {
-                    if (bid.getProductId().equals(p.getProductId())) { // get all bids where product is sold by the user
-                        bid.setUserId(user.getName());
-                        b.add(bid);
+        for(Product p: GlobalData.products){
+            
+            for(Bid bid:bidList){
+
+                if(p.getProductId().equals(bid.getProductId())){ //check for bids for a particular product
+                    
+                    for(SystemUser s: userList){
+
+                        if(bid.getUserId().equals(s.getUserId())){
+                            
+                            bid.setUserId(s.getName()); //replace user name in place of user Id
+                            b.add(bid);
+                        }
                     }
                 }
             }

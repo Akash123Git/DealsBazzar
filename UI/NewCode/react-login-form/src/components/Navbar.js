@@ -57,11 +57,17 @@ render(){
           </div>
           <ul className={ 'nav-menu active' , 'nav-menu'}>
             <li className='nav-item'>
-           {this.props.user.loginstatus==true?   <Link to='/dashboard' className='nav-links' >
+           {this.props.user.loginstatus==true?  <> <Link to='/dashboard' className='nav-links' >
                 Home
-              </Link>:
+              </Link></>:
               <Link to='/' className='nav-links' >
               Home
+            </Link>}
+            </li>
+            <li className='nav-item'>
+           {this.props.user.loginstatus==true?  <> <Link to="/mybids" className='nav-links'>my bids</Link></>:
+              <Link to='/' className='nav-links' >
+              my bids
             </Link>}
             </li>
         

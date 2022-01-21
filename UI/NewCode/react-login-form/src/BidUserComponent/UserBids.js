@@ -1,5 +1,4 @@
 import React from 'react'
-import './Product.css'
 import { connect } from 'react-redux'
 import Store from '../Redux/Store'
 import * as actions from '../Redux/Action/ProductAction'
@@ -9,11 +8,12 @@ import Navbar from '../components/Navbar'
 var mapStateToProps = state => {
     return {
         bidUserList: state.bidUserList,
-        products: state.products
+        products: state.products,
+        categories: state.categories
     }
 }
 
-class BidUserComponent extends React.Component {
+class UserBids extends React.Component {
 
     render() {
         return <>
@@ -63,9 +63,9 @@ class BidUserComponent extends React.Component {
                                 <button className="btn btn-success">Pay</button>
                                 </>
                                 :
-                                (bid.bidStatus==0?<button className="btn btn-info">not accepted</button>
+                                (bid.bidStatus==0?<button className="btn btn-secondary">not accepted</button>
                                 :
-                                <button className="btn btn-light">pending</button>)
+                                <button className="btn btn-info">pending</button>)
                                 }
                             </td>
                         </tr>
@@ -81,4 +81,4 @@ class BidUserComponent extends React.Component {
 
 }
 
-export default connect(mapStateToProps)(BidUserComponent);
+export default connect(mapStateToProps)(UserBids);

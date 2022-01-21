@@ -14,7 +14,7 @@ class BidService{
     updateBid=(data)=>{
         console.log("update data:",data)
         return fetch("http://localhost:8080/bid/updateBid", {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },

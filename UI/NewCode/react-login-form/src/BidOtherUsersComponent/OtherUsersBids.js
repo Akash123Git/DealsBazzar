@@ -6,13 +6,18 @@ import BidService from '../Service/BidService'
 
 var mapStateToProps = state => {
     return {
-        bidOtherUserslist: state.bidOtherUserslist
+        token:state.user.token
     }
 }
 
-class BidOtherUsersComponent extends React.Component {
+class OtherUsersBids extends React.Component {
     constructor(props){
         super(props)
+    }
+
+    componentDidMount(){
+        console.log("bidlist: ",this.props.data.bidOtherUserslist)
+        console.log("bidlist: ",this.props.data.productId)
     }
 
     updateBidStatus=(bid,status)=>{
@@ -48,7 +53,7 @@ class BidOtherUsersComponent extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.bidOtherUserslist.filter(bids=>bids.productId==this.props.productId).map((bid, index) => {
+                    {this.props.data.bidOtherUserslist.filter(bids=>bids.productId==this.props.data.productId).map((bid, index) => {
                         return <tr key={index}>
                             <th scope="row">{index + 1}</th>
                             <td>{bid.userId}</td>
@@ -57,15 +62,13 @@ class BidOtherUsersComponent extends React.Component {
                             <td>
                                 {bid.bidStatus == 1 ? 
                                 <>
-                                    <h6>Congrats!!! Your bid has been accepted you can now proceed for payment</h6>
-                                        <hr /><hr />
                                     <button className="btn btn-success">Accepted</button>
                                 </>
                                 :
                                 (bid.bidStatus == 0 ?
                                     <button className="btn btn-info">Not Accepted</button>
                                 :
-                                    <button className="btn btn-light" onClick={()=>{this.updateBidStatus(bid,1)}} >Accept</button>)
+                                    <button className="btn btn-secondary" onClick={()=>{this.updateBidStatus(bid,1)}} >Accept</button>)
                                 }
                             </td>
                         </tr>
@@ -81,4 +84,4 @@ class BidOtherUsersComponent extends React.Component {
 
 }
 
-export default connect(mapStateToProps)(BidOtherUsersComponent);
+export default connect(mapStateToProps)(OtherUsersBids);

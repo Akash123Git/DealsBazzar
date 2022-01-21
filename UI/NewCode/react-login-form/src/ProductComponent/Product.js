@@ -14,7 +14,8 @@ var mapStateToProps = state => {
   return {
     token:state.user.token,
     products: state.products,
-    categories: state.categories
+    categories: state.categories,
+    bidOtherUserslist: state.bidOtherUserslist
   }
 }
 
@@ -131,7 +132,7 @@ class Product extends React.Component {
                 <button className="btn btn-warning">De-Active</button>
               </>}
               </td>
-              <td><button className="btn btn-success" onClick={()=>{this.updateBidState(product.productId)}}>view Bids</button></td>
+              <td><button className="btn btn-secondary" onClick={()=>{this.updateBidState(product.productId)}}>view Bids</button></td>
             </tr>
 
 
@@ -139,7 +140,7 @@ class Product extends React.Component {
         </tbody>
       </table>
       
-      {this.state.displayStatus!=false?<ProductBids data={this.state.productId}/>:""}
+      {this.state.displayStatus!=false?<ProductBids data={{bidOtherUserslist:this.props.bidOtherUserslist,productId:this.state.productId}}/>:""}
     </>
     
     :<h1>please login</h1>}

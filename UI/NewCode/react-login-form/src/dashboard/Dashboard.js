@@ -49,7 +49,7 @@ class Dashboard extends React.Component {
           BidService.fetchOtherUsersBids()
             .then(response => response.json())
             .then(data => {
-              console.log(data)
+              console.log("other users: ",data)
               if (data.statusCode == 200) {
                 Store.dispatch({
                   ...otherUsersBidsAction.ACTION_LOAD_USER_PRODUCTS_BIDS, payload: {

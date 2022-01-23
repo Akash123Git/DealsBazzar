@@ -14,7 +14,18 @@ export const  LOAD_CATEGORIES= "loadCategories"
 
 export const LOAD_USERDATA = "loadUser"
 
+export const LOAD_PAYMENTTYPE = "loadPaymentType"
+export const PAY="pay"
+
 export const LOAD_LOGGED_USER_BIDS="loadLoggedUserBids"
 export const ADD_LOGEED_USER_BIDS="addLoggedUserBids"
+export const DELETE_USER_BID="deleteUserBid"
+export const BID="bid"
 export const LOAD_USER_PRODUCTS_BIDS="loadUserProductsBids"
 export const UPDATE_PRODUCT_BIDS="updateProductBids"
+
+export const LOAD_USER_ORDERS="loadOrderDetails"
+export const LOAD_ORDERS="loadOrderedDetails"
+export const ADD_ORDER="addOrder"
+
+export const LOGOUT="logout"

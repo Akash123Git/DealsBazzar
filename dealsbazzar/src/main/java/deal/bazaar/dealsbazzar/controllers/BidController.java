@@ -41,6 +41,9 @@ public class BidController {
     private JwtTokenUtil tokenUtil;
 
     @Autowired
+    private ProductService productService;
+
+    @Autowired
     private SystemUserService userService;
 
     @Autowired
@@ -73,23 +76,27 @@ public class BidController {
 
     @GetMapping("/getOtherUsersBids")
     public ResponseData getUsersBidList() {
-        GlobalData.bids.clear();
+        List<Product> productList = productService.getProductById(tokenUtil.getUserIdFromToken(GlobalData.token));
         List<SystemUser> userList = userService.loadUsers();
         List<Bid> bidList = bidService.getBids();
-        GlobalData.bids = bidList;
         List<Bid> b = new ArrayList<Bid>();
-        for(Product p: GlobalData.products){
-            
-            for(Bid bid:bidList){
+        for (Product p : productList) {
 
-                if(p.getProductId().equals(bid.getProductId())){ //check for bids for a particular product
-                    
-                    for(SystemUser s: userList){
+            for (Bid bid : bidList) {
 
-                        if(bid.getUserId().equals(s.getUserId())){
-                            
-                            bid.setUserId(s.getName()); //replace user name in place of user Id
-                            b.add(bid);
+                if (p.getProductId().equals(bid.getProductId())) {
+
+                    int i = bid.getBidStatus();
+                    // check for bids for a particular
+                    if (i == 1 || i == -1) { // product
+
+                        for (SystemUser s : userList) {
+
+                            if (bid.getUserId().equals(s.getUserId())) {
+
+                                bid.setUserId(s.getName()); // replace user name in place of user Id
+                                b.add(bid);
+                            }
                         }
                     }
                 }
@@ -105,36 +112,91 @@ public class BidController {
     public ResponseData getLoggedUserBids() {
 
         List<Bid> bidList = bidService.getBidsByUserId(tokenUtil.getUserIdFromToken(GlobalData.token));
+        List<Bid> b=new ArrayList<Bid>();
+        for(Bid bid:bidList){
+            if(bid.getBidStatus()==1){
+                b.add(bid);
+            }else if(bid.getBidStatus()==-1){
+                b.add(bid);
+            }else{
 
+            }
+        }
         if (bidList.size() > 0) {
-            return new ResponseData(200, bidList, "fetched");
+            return new ResponseData(200, b, "fetched");
         }
         return new ResponseData(400, null, "no bids placed");
     }
 
     @PutMapping("/updateBid")
-    public ResponseData updateBid(@RequestBody Bid bid) {
+    public ResponseData updateBid(@RequestBody List<Bid> recievedbidlist) {
+        List<Bid> bidList = bidService.getBids();
+        Bid sendBid = new Bid(); // array list
 
-        Bid data = bidService.validateId(bid.getBidId());
-        List<Bid> bidList = new ArrayList<Bid>();
+        for (Bid recdata : recievedbidlist) {
 
-        if (data != null) {
+            if (recdata.getBidStatus() == 2) { // finding accepted bid from the recieved list
 
-            data.setBidStatus(bid.getBidStatus());
-            data = bidService.updateBid(data);
+                for (Bid bid : bidList) {
 
-            bidList.add(data);
+                    if (bid.getBidId().equals(recdata.getBidId())) { // finding the clear data of the bid
 
-            for (Bid b : GlobalData.bids) {
+                        bid.setBidStatus(1); // updating the clear data for the accepted bids
+                        Bid b1 = new Bid();
+                        b1 = bidService.updateBid(bid);
+                        b1.setUserId(recdata.getUserId());
+                        sendBid = b1;
 
-                if (bid.getProductId() == b.getProductId()) {
-                    b.setBidStatus(0);
-                    bidList.add(b);
+                    }
+
                 }
+            } else if (recdata.getBidStatus() == -1) // if it is pending update it to rejected
+            {
+
+                for (Bid bid : bidList) {
+
+                    if (bid.getBidId().equals(recdata.getBidId())) { // finding the clear data of the bid
+
+                        bid.setBidStatus(0); // updating the clear data for the rejected bids
+                        Bid b1 = new Bid();
+                        b1 = bidService.updateBid(bid);
+                        b1.setUserId(recdata.getUserId());
+
+                    }
+
+                }
+
+            } else {
+                System.out.println("do nothing");
             }
-            return new ResponseData(200, bidList, "bid is successfully updated");
         }
-        return new ResponseData(400, bid, "bid could not be updated");
+        if (sendBid != null) {
+            return new ResponseData(200, sendBid, "bid is successfully updated");
+        }
+        /*
+         * Bid data = bidService.validateId(bid.getBidId()); //gets bid details
+         * List<Bid> bidList = new ArrayList<Bid>(); //new array
+         * 
+         * if (data != null) {
+         * 
+         * data.setBidStatus(bid.getBidStatus()); //bid status updated to accepted
+         * data = bidService.updateBid(data);
+         * 
+         * bidList.add(data); //added to new list
+         * 
+         * for (Bid b : GlobalData.bids) {
+         * 
+         * if (bid.getProductId() == b.getProductId()) {
+         * b.setBidStatus(0);
+         * bidService.updateBid(b);
+         * bidList.add(b);
+         * }
+         * }
+         */ /*
+             * return new ResponseData(200, bidList, "bid is successfully updated");
+             * }
+             */
+        return new ResponseData(400, null, "bid could not be updated");
     }
 
     @DeleteMapping("/deleteBid/{bidId}")

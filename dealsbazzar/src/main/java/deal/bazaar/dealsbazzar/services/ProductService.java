@@ -100,4 +100,12 @@ public class ProductService {
         }
     }
 
+    public List<Product> getProductById(String vendorId) {
+        try {
+            return productRepository.getProductById(vendorId);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }

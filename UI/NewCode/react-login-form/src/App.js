@@ -16,6 +16,10 @@ import * as actions from "./Redux/Action/ProductAction";
 import ProductService from "./Service/ProductService";
 import ViewProducts from "./ViewProducts/ViewProducts";
 import SignInForm from "./components/pages/SignInForm";
+import PayMent from "./PaymentComponent/Payment";
+import Pay from "./PaymentComponent/Pay";
+import MyOrders from "./UserOrder/UserOrder"
+import Orders from "./OrderComponent/OrderComponent"
 
 import SignUpForm from "./components/pages/SignUpForm";
 
@@ -37,7 +41,10 @@ export default class App extends React.Component {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/myprofile" element={<Profile />} />
         <Route path="/mybids" element={<UserBids />} />
-        
+        <Route path="/payment" element={<PayMent />} />
+        <Route path="/pay" element={<Pay />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/myorders" element={<MyOrders />} />
       </Routes>
 
     );

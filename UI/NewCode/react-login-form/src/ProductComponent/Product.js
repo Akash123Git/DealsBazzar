@@ -29,6 +29,10 @@ class Product extends React.Component {
     }
   }
 
+  componentDidMount(){
+    console.log("bidother: ",this.props.bidOtherUserslist)
+  }
+
   updateBidState=(prodId)=>{
     if(this.state.displayStatus==false){
       this.setState({displayStatus:true})

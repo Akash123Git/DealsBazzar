@@ -29,7 +29,9 @@ public class PaymentTypeController {
     @PostMapping("/savePaymentType")
     public ResponseEntity savePaymentType(@RequestBody PaymentType paymentType)
     {
+        System.out.println(paymentType);
         PaymentType newPaymentType=paymentTypeService.savePaymentType(paymentType);
+        System.out.println("\n "+paymentType);
         if(paymentType==null)
             return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
         else

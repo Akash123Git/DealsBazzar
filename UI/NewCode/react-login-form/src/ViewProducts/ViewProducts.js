@@ -40,7 +40,7 @@ class ViewProducts extends React.Component {
         {this.props.data.image != null ?
                 <>
                 {this.props.data.image.map((image)=>{
-                   return <img className="image" src={`data:image/jpeg;base64,${image}`} alt="first image"></img>
+                   return <img className="image" src={`data:image/jpeg;base64,${image}`} alt="first image"/>
                 })}
                     
                     <h6>no of images: {this.props.data.image.length}</h6>

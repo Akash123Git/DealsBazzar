@@ -15,6 +15,7 @@ export default function ProductReducer(state=[],action){
                 return prod
             }
         })
+        case actiontype.LOGOUT: return action.payload.reset
         default: return state
     }
 }

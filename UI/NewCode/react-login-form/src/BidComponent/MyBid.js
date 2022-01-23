@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Navigate } from "react-router-dom"
 import './MyBid.css'
 import BidService from '../Service/BidService'
 import * as actions from '../Redux/Action/BidUserAction'
@@ -18,7 +19,8 @@ class MyBid extends React.Component {
   constructor(){
     super()
     this.state={
-      bidStatus : true
+      bidStatus : true,
+      redirect : false
     }
   }
 
@@ -39,6 +41,7 @@ class MyBid extends React.Component {
         .then(data=>{
           if(data.statusCode==200){
             alert("bid placed is successfully")
+            this.setState({redirect:true})
             Store.dispatch({
               ...actions.ACTION_ADD_LOGGED_USER_BIDS, payload: {
                 bid: data.data
@@ -56,9 +59,14 @@ class MyBid extends React.Component {
     event.preventDefault();
   }
 
-  render() {
-    return <>
 
+
+  render() {
+    if (this.state.redirect) {
+      return <Navigate to="/dashboard"></Navigate>
+    }
+    return <>
+  
     {this.state.bidStatus!=false?<>
       <div className="container">
         <div className="row row-cols-2 row-cols-lg-3 g-2 g-lg-3">
@@ -86,7 +94,7 @@ class MyBid extends React.Component {
         <div className="input-group mb-3">
           <div className="form-group">
             <label >Set Price</label>
-            <input type="number" className="form-control" ref={c => this.bidderPrice = c} id="exampleInputPassword1" min={this.props.product.vendorPrice+500} placeholder="price" />
+            <input type="number" className="form-control" ref={c => this.bidderPrice = c} id="exampleInputPassword1" min={this.props.product.vendorPrice+(this.props.product.vendorPrice*(2/100))} placeholder="price" />
           </div>
           &ensp;
           <div className="form-group">

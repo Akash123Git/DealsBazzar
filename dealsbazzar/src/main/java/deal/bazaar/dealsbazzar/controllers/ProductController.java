@@ -10,10 +10,12 @@ import java.util.UUID;
 
 import deal.bazaar.dealsbazzar.global.GlobalData;
 import deal.bazaar.dealsbazzar.models.Product;
+import deal.bazaar.dealsbazzar.models.SystemUser;
 import deal.bazaar.dealsbazzar.responses.ImageResponseData;
 import deal.bazaar.dealsbazzar.responses.ResponseData;
 import deal.bazaar.dealsbazzar.security.JwtTokenUtil;
 import deal.bazaar.dealsbazzar.services.ProductService;
+import deal.bazaar.dealsbazzar.services.SystemUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,6 +37,9 @@ public class ProductController {
 
     @Autowired
     private JwtTokenUtil tokenUtil;
+
+    @Autowired
+    private SystemUserService userService;
 
     @Autowired
     private ProductService productService;
@@ -113,7 +118,7 @@ public class ProductController {
     @PostMapping("/addProductImage")
     public ResponseData addImage(@RequestParam String productId, @RequestParam MultipartFile imageFile) {
         // directory path
-        String directoryName = "/home/srikarkalle/Pictures/UploadedImages";
+        String directoryName = "/home/akash/UploadedImages";
 
         Product product = productService.validateId(productId);
         if (product == null) {
@@ -167,6 +172,7 @@ public class ProductController {
     public ResponseData getProducts() {
         GlobalData.products.clear();
         List<Product> productList = productService.getProducts();
+        List<SystemUser> userList = userService.loadUsers();
 
         if (!GlobalData.token.isEmpty()) {
             for (Product p : productList) {
@@ -174,7 +180,14 @@ public class ProductController {
                     p.setVendorId(GlobalData.token);
                     GlobalData.products.add(p);
                 } else {
-                    p.setVendorId("");
+                    for (SystemUser s : userList) {
+
+                        if (p.getVendorId().equals(s.getUserId())) {
+
+                            p.setVendorId(s.getName());
+
+                        }
+                    }
                 }
             }
         } else {

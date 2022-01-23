@@ -7,9 +7,6 @@ import * as actions from '../Redux/Action/ProductIdAction'
 import { Link } from 'react-router-dom'
 
 import Navbar from '../components/Navbar'
-import * as userBidAction from '../Redux/Action/BidUserAction'
-import * as otherUsersBidsAction from '../Redux/Action/BidOtherUsersAction'
-import BidService from '../Service/BidService'
 
 var mapStateToProps = state => {
   return {
@@ -30,43 +27,13 @@ class Dashboard extends React.Component {
     })
   }
 
-  componentDidMount() {
-
-    //fetching user bids
-    BidService.fetchUserBid()
-      .then(response => response.json())
-      .then(data => {
-      console.log(data)
-        if (data.statusCode == 200) {
-
-          Store.dispatch({
-            ...userBidAction.ACTION_LOAD_LOGGED_USER_BIDS, payload: {
-              bidlist: data.data
-            }
-          })
-
-          //fetching other users biding details
-          BidService.fetchOtherUsersBids()
-            .then(response => response.json())
-            .then(data => {
-              console.log("other users: ",data)
-              if (data.statusCode == 200) {
-                Store.dispatch({
-                  ...otherUsersBidsAction.ACTION_LOAD_USER_PRODUCTS_BIDS, payload: {
-                    bidlist: data.data
-                  }
-                })
-              }
-            })
-            //fetched other users biding details
-        }
-      })
-    //fetched user bids
-  }
-
   render() {
     return <>
       <Navbar />
+      <div>
+      <Link to='/myorders' className='nav-links'> <button className="btn btn-success">My Orders</button></Link>
+      <Link to='/orders' className='nav-links'> <button className="btn btn-success">Orders</button></Link>
+        </div>
       {this.props.token != "" ? <>
         {this.props.products.filter(p => p.vendorId != this.props.token).map(product => product.productImages == null ? <p></p>
           :

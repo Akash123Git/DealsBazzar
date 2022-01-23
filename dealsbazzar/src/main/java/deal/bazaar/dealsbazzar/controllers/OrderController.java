@@ -5,9 +5,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import deal.bazaar.dealsbazzar.global.GlobalData;
 import deal.bazaar.dealsbazzar.models.Order;
+import deal.bazaar.dealsbazzar.models.SendOrderDetails;
+import deal.bazaar.dealsbazzar.models.SystemUser;
 import deal.bazaar.dealsbazzar.responses.ResponseData;
+import deal.bazaar.dealsbazzar.security.JwtTokenUtil;
+import deal.bazaar.dealsbazzar.services.CommonService;
 import deal.bazaar.dealsbazzar.services.OrderService;
+import deal.bazaar.dealsbazzar.services.SystemUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,10 +34,21 @@ public class OrderController {
     String currentDate=formatter.format(date);
 
     @Autowired
+    private CommonService commonService;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+    @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private SystemUserService userService;
 
     @PostMapping("/addorder")
     public ResponseData addOrder(@RequestBody Order order) {
+        
+        SystemUser s= userService.getById(jwtTokenUtil.getUserIdFromToken(GlobalData.token));
+        order.setUserName(s.getName());
         order.setOrderId(UUID.randomUUID().toString());
         order.setOrderDate(currentDate);
         Order data = orderService.addOrder(order);
@@ -42,11 +59,21 @@ public class OrderController {
         return new ResponseData(400, null, "order is not placed");
     }
 
-    @GetMapping("/getorderdetails")
+    @GetMapping("/getorders")
     public ResponseData getOrders() {
 
-        List<Order> orderList = orderService.getOrders();
-        if (orderList.size() > 0) {
+        List<SendOrderDetails> orderList = commonService.getOrders();
+        if (orderList!= null) {
+            return new ResponseData(200, orderList, "success");
+        }
+        return new ResponseData(400, null, "order details not found");
+    }
+
+    @GetMapping("/getUserOrders")
+    public ResponseData getUserOrders() {
+
+        List<SendOrderDetails> orderList = commonService.getUserOrders();
+        if (orderList!= null) {
             return new ResponseData(200, orderList, "success");
         }
         return new ResponseData(400, null, "order details not found");

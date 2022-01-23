@@ -12,3 +12,21 @@ export const ACTION_ADD_LOGGED_USER_BIDS={
         bid:undefined
     }
 }
+export const ACTION_BID={
+    type:actiontype.BID,
+    payload:{
+        bid:undefined
+    }
+}
+export const LOGOUT={
+    type:actiontype.LOGOUT,
+    payload:{
+        reset:undefined
+    }
+}
+export const ACTION_DELETE_USERB_ID={
+    type:actiontype.DELETE_USER_BID,
+    payload:{
+        bidId:undefined
+    }
+}

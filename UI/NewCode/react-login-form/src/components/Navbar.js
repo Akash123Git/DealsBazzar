@@ -5,7 +5,14 @@ import './Navbar.css';
 import {connect} from 'react-redux'
 import store from '../Redux/Store';
 import { ACTION_USER_LOGOUT } from ".././Redux/Action/UserAction";
-
+import * as logout from '.././Redux/Action/BidOtherUsersAction'
+import * as logout1 from '.././Redux/Action/BidUserAction'
+import * as logout2 from '.././Redux/Action/CategoryAction'
+import * as logout3 from '.././Redux/Action/OrderAction'
+import * as logout4 from '.././Redux/Action/PaymentType'
+import * as logout5 from '.././Redux/Action/ProductAction'
+import * as logout6 from '.././Redux/Action/ProductIdAction'
+import * as logout7 from '.././Redux/Action/UserAction'
 
 var mapStateToProps = state => {
   return {
@@ -36,6 +43,14 @@ componentDidMount()
 logout = (event)=>{
   this.setState({loginstatus:true}) 
   store.dispatch({...ACTION_USER_LOGOUT})
+  store.dispatch({...logout.LOGOUT,payload: {reset: []}})
+  store.dispatch({...logout1.LOGOUT,payload: {reset: []}})
+  store.dispatch({...logout2.LOGOUT,payload: {reset: []}})
+  store.dispatch({...logout3.LOGOUT,payload: {reset: []}})
+  store.dispatch({...logout4.LOGOUT,payload: {reset: []}})
+  store.dispatch({...logout5.LOGOUT,payload: {reset: []}})
+  store.dispatch({...logout6.LOGOUT,payload: {reset: {}}})
+  store.dispatch({...logout7.LOGOUT,payload: {reset: {}}})
 } 
 render(){
   if(this.state.loginstatus){

@@ -1,21 +1,29 @@
 import * as actiontype from '../Action/Action'
 
-export default function BidOtherUsersReducer(state=[],action){
-    switch(action.type){
-        case actiontype.LOAD_USER_PRODUCTS_BIDS:return action.payload.bidlist
-        case actiontype.UPDATE_PRODUCT_BIDS:return state.map((bid)=>{
-        
-            //another map start
-            action.payload.bidlist.map((updatedbid)=>{
 
-                if(bid.productId==updatedbid.productId){
-
-                    bid.bidStatus=updatedbid.bidStatus   
+export default function BidOtherUsersReducer(state = [], action) {
+    switch (action.type) {
+        case actiontype.LOAD_USER_PRODUCTS_BIDS: return action.payload.bidlist
+        case actiontype.UPDATE_PRODUCT_BIDS: return state.map((mapBid) => {
+            //4 times
+            if (mapBid.bidId == action.payload.bid.bidId) {
+                mapBid.bidStatus = action.payload.bid.bidStatus
+                return mapBid
+            }
+            else if (mapBid.productId == action.payload.bid.productId) {
+                if (mapBid.productStatus == -1) {
+                    mapBid.bidStatus = 0
+                    return mapBid
                 }
-            })
-            //another map end
-            return bid
+                else {
+                    return mapBid
+                }
+
+            } else {
+                return mapBid
+            }
         })
-        default:return state
+        case actiontype.LOGOUT: return action.payload.reset
+        default: return state
     }
 }

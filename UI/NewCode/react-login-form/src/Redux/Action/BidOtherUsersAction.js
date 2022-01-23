@@ -10,6 +10,13 @@ export const ACTION_LOAD_USER_PRODUCTS_BIDS={
 export const ACTION_UPDATE_PRODUCT_BID={
     type:actiontype.UPDATE_PRODUCT_BIDS,
     payload:{
-        bidlist:undefined
+        bid:undefined
+    }
+}
+
+export const LOGOUT={
+    type:actiontype.LOGOUT,
+    payload:{
+        reset:undefined
     }
 }

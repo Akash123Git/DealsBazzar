@@ -3,7 +3,10 @@ import { connect } from 'react-redux'
 import Store from '../Redux/Store'
 import * as actions from '../Redux/Action/ProductAction'
 import ProductService from '../Service/ProductService'
+import * as productaction from '../Redux/Action/ProductIdAction'
+import * as bidaction from '../Redux/Action/BidUserAction'
 import Navbar from '../components/Navbar'
+import { Link } from 'react-router-dom'
 
 var mapStateToProps = state => {
     return {
@@ -13,7 +16,23 @@ var mapStateToProps = state => {
     }
 }
 
+
+
 class UserBids extends React.Component {
+
+    setBidAndProduct=(bid,product)=>{
+        Store.dispatch({
+            ...productaction.ACTION_SET_PRODUCT_ID, payload: {
+              product: product
+            }
+          })
+          Store.dispatch({
+            ...bidaction.ACTION_BID, payload: {
+              bid:bid
+            }
+          })
+    }
+
 
     render() {
         return <>
@@ -40,8 +59,9 @@ class UserBids extends React.Component {
                             <th scope="row">{index + 1}</th>
                             {this.props.products.map((product) => {
                                 if (bid.productId == product.productId) {
+                                    
                                     return <>
-                                        <td>{product.productName}</td>
+                                        <td ref={this.product=product}>{product.productName}</td>
                                         <td>{product.productDescription}</td>
                                         {this.props.categories.map((category) => { return category.categoryId == product.categoryId ?
                                         <td>{category.productMeasurement}</td>
@@ -60,7 +80,7 @@ class UserBids extends React.Component {
                                 {bid.bidStatus==1?<>
                                 <h6>Congrats!!! Your bid has been accepted you can now proceed for payment</h6>
                                 <hr/><hr/>
-                                <button className="btn btn-success">Pay</button>
+                                <Link to="/payment"><button className="btn btn-success" onClick={(event)=>{this.setBidAndProduct(bid,this.product)}}>Proceed to pay</button></Link>
                                 </>
                                 :
                                 (bid.bidStatus==0?<button className="btn btn-secondary">not accepted</button>

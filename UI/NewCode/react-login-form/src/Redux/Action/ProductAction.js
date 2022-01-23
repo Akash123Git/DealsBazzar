@@ -22,3 +22,9 @@ export const ACTION_UPDATE_PRODUCT={
         images:undefined
     }
 }
+export const LOGOUT={
+    type:actiontype.LOGOUT,
+    payload:{
+        reset:undefined
+    }
+}

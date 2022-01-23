@@ -23,3 +23,10 @@ export const ACTION_LOAD_USER_DATA = {
         userdetails : undefined
     }
 }
+
+export const LOGOUT={
+    type:actionType.LOGOUT,
+    payload:{
+        reset:undefined
+    }
+}

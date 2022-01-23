@@ -6,3 +6,9 @@ export const ACTION_SET_PRODUCT_ID={
         product:undefined
     }
 }
+export const LOGOUT={
+    type:actiontype.LOGOUT,
+    payload:{
+        reset:undefined
+    }
+}

@@ -6,3 +6,9 @@ export const ACTION_LOAD_CATEGORIES={
         categories:undefined
     }
 }
+export const LOGOUT={
+    type:actiontype.LOGOUT,
+    payload:{
+        reset:undefined
+    }
+}

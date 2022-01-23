@@ -17,5 +17,6 @@ export default function TokenReducer(state="",action){
             token : undefined,
             username : undefined
         }
+        case actiontype.LOGOUT: return action.payload.reset
     }
 }

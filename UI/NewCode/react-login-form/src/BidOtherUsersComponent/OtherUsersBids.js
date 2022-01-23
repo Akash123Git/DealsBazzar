@@ -6,32 +6,35 @@ import BidService from '../Service/BidService'
 
 var mapStateToProps = state => {
     return {
-        token:state.user.token
+        token: state.user.token
     }
 }
 
 class OtherUsersBids extends React.Component {
-    constructor(props){
-        super(props)
+    constructor(props) {
+        super(props)   
     }
 
-    componentDidMount(){
-        console.log("bidlist: ",this.props.data.bidOtherUserslist)
-        console.log("bidlist: ",this.props.data.productId)
+    componentDidMount() {
+        console.log("bidlist: ", this.props.data.bidOtherUserslist)
+        console.log("productId: ", this.props.data.productId)
     }
+    componentDidUpdate() {
+        console.log("bidlist after update: ", this.props.data.bidOtherUserslist)
+    }
+    updateBidStatus = (bid, status) => {
+        var arr = []
+        arr=this.props.data.bidOtherUserslist.filter(bids => ((bids.productId == this.props.data.productId) && (bids.bidStatus==-1)))
+        arr.map((p)=>p.bidId == bid.bidId?p.bidStatus = 2:p)
 
-    updateBidStatus=(bid,status)=>{
-
-        bid.bidStatus=status
-
-        BidService.updateBid(bid)
+        BidService.updateBid(arr)
         .then(response=>response.json())
         .then(data=>{
           if(data.statusCode==200){
-            alert("bid status is successfully updated")
+            console.log("data recieved  : ",data.data)
             Store.dispatch({
               ...bidaction.ACTION_UPDATE_PRODUCT_BID, payload: {
-                bidlist: data.data
+                bid: data.data
               }
             })
           }else{
@@ -43,9 +46,11 @@ class OtherUsersBids extends React.Component {
 
     render() {
         return <>
+        
             <table className="table" >
                 <thead>
                     <tr>
+                        <th scope="col">sl no</th>
                         <th scope="col">Bidder Name</th>
                         <th scope="col">Bidder Price</th>
                         <th scope="col">Bidder Stock</th>
@@ -53,22 +58,22 @@ class OtherUsersBids extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.data.bidOtherUserslist.filter(bids=>bids.productId==this.props.data.productId).map((bid, index) => {
+                    {this.props.data.bidOtherUserslist.filter(bids => bids.productId == this.props.data.productId).map((bid, index) => {
                         return <tr key={index}>
                             <th scope="row">{index + 1}</th>
                             <td>{bid.userId}</td>
                             <td>{bid.bidPrice}</td>
                             <td>{bid.bidStock}</td>
                             <td>
-                                {bid.bidStatus == 1 ? 
-                                <>
-                                    <button className="btn btn-success">Accepted</button>
-                                </>
-                                :
-                                (bid.bidStatus == 0 ?
-                                    <button className="btn btn-info">Not Accepted</button>
-                                :
-                                    <button className="btn btn-secondary" onClick={()=>{this.updateBidStatus(bid,1)}} >Accept</button>)
+                                {bid.bidStatus == 1 ?
+                                    <>
+                                        <button className="btn btn-success">Accepted</button>
+                                    </>
+                                    :
+                                    (bid.bidStatus == 0 ?
+                                        <button className="btn btn-info">Not Accepted</button>
+                                        :
+                                        <button className="btn btn-secondary" onClick={() => { this.updateBidStatus(bid, 2) }} >Accept</button>)
                                 }
                             </td>
                         </tr>

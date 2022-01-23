@@ -10,12 +10,18 @@ public class GlobalData {
 
     public static String token;
 
+    public static String paymentId;
+
     public static List<Product> products;
 
     public static List<Bid> bids;
     
     static{
         token="";
+    }
+
+    static{
+        paymentId="";
     }
 
     static{

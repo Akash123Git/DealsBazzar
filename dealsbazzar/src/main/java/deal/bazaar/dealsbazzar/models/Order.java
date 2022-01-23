@@ -23,8 +23,7 @@ public class Order {
     private String orderId;
     private String bidId;
     private String paymentId;
-    private String bidderAddress;
-    private long bidderMobileNumber;
+    private String userName;
     private String orderDate;
-    private int orderStatus;
+    private String orderStatus;
 }

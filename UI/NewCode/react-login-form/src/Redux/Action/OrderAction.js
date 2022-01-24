@@ -18,6 +18,12 @@ export const ACTION_ADD_ORDER={
         order:undefined
     }
 }
+export const ACTION_CANCEL_ORDER={
+    type:actiontype.CANCEL_ORDER,
+    payload:{
+        orderId:undefined
+    }
+}
 export const LOGOUT={
     type:actiontype.LOGOUT,
     payload:{

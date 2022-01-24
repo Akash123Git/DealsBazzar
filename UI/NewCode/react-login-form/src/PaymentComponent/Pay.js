@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Navigate } from "react-router";
 import * as bidUserAction from '../Redux/Action/BidUserAction'
 import * as orderUseraction from '../Redux/Action/OrderAction'
+import * as productAction from '../Redux/Action/ProductAction'
 import paymentService from '../Service/PaymentService'
 import Store from '../Redux/Store'
 
@@ -37,13 +38,21 @@ class Pay extends Component {
                     console.log("paymenttype: ", data)
                     if (data.statusCode == 200) {
                         Store.dispatch({
-                            ...bidUserAction.ACTION_DELETE_USERB_ID, payload: {
+                            ...bidUserAction.ACTION_DELETE_USER_BID, payload: {
                                 bidId: bidId
                             }
                         })
                         Store.dispatch({
                             ...orderUseraction.ACTION_ADD_ORDER, payload: {
                                 order: data.data
+                            }
+                        })
+                        var pid=data.data.productId
+                        var stock=data.data.stock
+                        Store.dispatch({
+                            ...productAction.ACTION_UPDATE_PRODUCT_QUANTITY, payload: {
+                                pid: pid,
+                                stock:stock
                             }
                         })
                     }

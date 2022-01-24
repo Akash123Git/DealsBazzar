@@ -13,13 +13,19 @@ export const ACTION_LOAD_PRODUCTS={
         products:undefined
     }
 }
-
 export const ACTION_UPDATE_PRODUCT={
     type:actiontype.UPDATE_PRODUCTS,
     payload:{
         pid:undefined,
         status:undefined,
         images:undefined
+    }
+}
+export const ACTION_UPDATE_PRODUCT_QUANTITY={
+    type:actiontype.UPDATE_PRODUCT_QUANTITY,
+    payload:{
+        pid:undefined,
+        stock:undefined
     }
 }
 export const LOGOUT={

@@ -39,17 +39,20 @@ class SignInForm extends React.Component {
     this.state = {
       email: "",
       password: "",
-      loginStatus: false
+      loginStatus: false,
+      counter: 0
     }
   }
 
   componentDidUpdate() {
+    var i=this.state.counter
+    i=i+1
+    if(i==1){
     //console.log("After Mounting: ",this.props.token)
     CategoryService.getCategories()
       .then(response => response.json())
       .then(data => {
         if (data.statusCode == 200) {
-
           Store.dispatch({
             ...action1.ACTION_LOAD_CATEGORIES, payload: {
               categories: data.data
@@ -90,7 +93,7 @@ class SignInForm extends React.Component {
     BidService.fetchUserBid()
       .then(response => response.json())
       .then(data => {
-        console.log("user: ", data)
+        
         if (data.statusCode == 200) {
 
           Store.dispatch({
@@ -105,7 +108,7 @@ class SignInForm extends React.Component {
     BidService.fetchOtherUsersBids()
       .then(response => response.json())
       .then(data => {
-        console.log("other users: ", data)
+        
         if (data.statusCode == 200) {
           Store.dispatch({
             ...otherUsersBidsAction.ACTION_LOAD_USER_PRODUCTS_BIDS, payload: {
@@ -119,7 +122,7 @@ class SignInForm extends React.Component {
     PaymentService.getPaymentTypes()
       .then(response => response.json())
       .then(data => {
-        console.log("paymenttype: ", data)
+        
         if (data.statusCode == 200) {
           Store.dispatch({
             ...paymentAction.ACTION_LOAD_PAYMENTTYPE, payload: {
@@ -133,7 +136,7 @@ class SignInForm extends React.Component {
     OrderService.fetchUserOrders()
       .then(response => response.json())
       .then(data => {
-        console.log("user order: ", data)
+        
         if (data.statusCode == 200) {
           Store.dispatch({
             ...orderAction.ACTION_LOAD_USER_ORDERS, payload: {
@@ -147,7 +150,7 @@ class SignInForm extends React.Component {
     OrderService.fetchOrders()
       .then(response => response.json())
       .then(data => {
-        console.log("other user order: ", data)
+        
         if (data.statusCode == 200) {
           Store.dispatch({
             ...orderAction.ACTION_LOAD_ORDERS, payload: {
@@ -157,6 +160,7 @@ class SignInForm extends React.Component {
         }
       })
     //fetched OrderDetails
+  }
 }
 
 login = (event) => {
@@ -180,7 +184,7 @@ login = (event) => {
     },
     body: JSON.stringify(ob)
   }).then(response => response.json()).then(data => {
-    console.log(data);
+    //console.log(data);
     // var token=data.token
     if (data.status) {
       Store.dispatch({
@@ -190,13 +194,11 @@ login = (event) => {
         }
 
       })
-      this.setState({ loginStatus: true })
+      this.setState({ loginStatus: true,regmsg: data.msg })
+    }else{
+      this.setState({regmsg: data.msg })
     }
-
-    this.setState({ regmsg: data.msg })
   });;
-
-  console.log(ob)
   event.preventDefault()
 }
 

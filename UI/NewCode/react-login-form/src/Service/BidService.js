@@ -1,7 +1,7 @@
 class BidService{
     
     addBidService=(data)=>{
-        console.log("service: ",data)
+        //console.log("service: ",data)
         return fetch("http://localhost:8080/bid/addBid", {
             method: "POST",
             headers: {
@@ -12,7 +12,7 @@ class BidService{
     }
 
     updateBid=(data)=>{
-        console.log("update data:",data)
+        //console.log("update data:",data)
         return fetch("http://localhost:8080/bid/updateBid", {
             method: "PUT",
             headers: {

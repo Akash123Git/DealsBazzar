@@ -9,6 +9,16 @@ fetchOrders=()=>{
     
 }
 
+cancelOrder=(order)=>{
+    return fetch("http://localhost:8080/order/cancelorder", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(order)
+        })
+}
+
 }
 
 var obj = new OrderService()

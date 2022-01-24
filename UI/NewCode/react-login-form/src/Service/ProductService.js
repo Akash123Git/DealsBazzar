@@ -1,7 +1,7 @@
 class ProductService {
     addProduct = (data) => {
 
-        console.log(data)
+        //console.log(data)
         return fetch("http://localhost:8080/product/addProduct", {
             method: "POST",
             headers: {

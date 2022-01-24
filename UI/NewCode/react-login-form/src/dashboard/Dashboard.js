@@ -13,7 +13,9 @@ var mapStateToProps = state => {
     products: state.products,
     product: state.product,
     categories: state.categories,
-    token: state.user.token
+    token: state.user.token,
+    userorderList: state.userorderlist,
+    orderList: state.orderlist
   }
 }
 
@@ -31,15 +33,34 @@ class Dashboard extends React.Component {
     return <>
       <Navbar />
       <div>
-      <Link to='/myorders' className='nav-links'> <button className="btn btn-success">My Orders</button></Link>
-      <Link to='/orders' className='nav-links'> <button className="btn btn-success">Orders</button></Link>
-        </div>
+
+        <Link to='/myorders' className='nav-links'>
+          <button type="button" class="btn rounded-pill btn-dark position-relative">
+          My orders
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {this.props.userorderList.length}
+            <span class="visually-hidden">My orders</span>
+          </span>
+        </button>
+        </Link>
+        <Link to='/orders' className='nav-links'> 
+        <button type="button" class="btn rounded-pill btn-dark position-relative">
+        Orders placed
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {this.props.orderList.length}
+            <span class="visually-hidden">Orders placed</span>
+          </span>
+        </button>
+        </Link>
+
+      </div>
+      
       {this.props.token != "" ? <>
         {this.props.products.filter(p => p.vendorId != this.props.token).map(product => product.productImages == null ? <p></p>
           :
 
           <div className="container">
-            <div className="row row-cols-2 row-cols-lg-4 g-2 g-lg-3">
+            <div className="row"> {/* row-cols-2 row-cols-lg-4 g-2 g-lg-3 */}
               <div className="col">
                 <div className="p-3">
                   <div className="card">

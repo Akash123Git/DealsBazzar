@@ -24,7 +24,7 @@ export const LOGOUT={
         reset:undefined
     }
 }
-export const ACTION_DELETE_USERB_ID={
+export const ACTION_DELETE_USER_BID={
     type:actiontype.DELETE_USER_BID,
     payload:{
         bidId:undefined

@@ -22,7 +22,7 @@ class OrderComponent extends React.Component {
     render() {
         return <>
             <Navbar />
-            <table className="table" >
+            <table className="table table-dark table-striped" >
                 <thead>
                     <tr>
                         <th scope="col">Sl.no</th>
@@ -54,11 +54,13 @@ class OrderComponent extends React.Component {
                             <td>{order.orderDate}</td>
                             <td>
                                 {order.orderStatus=="shipping"?<>
-                                <button className="btn btn-info">shipping</button>
+                                <button className="btn btn-light">To be delivered</button>
                                 </>
+                                :(order.orderStatus=="cancelled"?
+                                <button className="btn btn-dark">cancelled</button>
                                 :
-                                <button className="btn btn-info">delivered</button>
-                                }
+                                <button className="btn btn-success">delivered</button>
+                                )}
                             </td>
                         </tr>
 

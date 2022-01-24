@@ -79,7 +79,7 @@ public class OrderController {
         return new ResponseData(400, null, "order details not found");
     }
 
-    @PutMapping("/updateorder")
+    /* @PutMapping("/updateorder")
     public ResponseData updateOrder(@RequestBody Order order){
         Order data = orderService.validateId(order.getOrderId());
         if (data == null) {
@@ -92,6 +92,17 @@ public class OrderController {
         }else{
             return new ResponseData(200, data, "order is successfully updated");
         }
+    } */
+
+    @PutMapping("/cancelorder")
+    public ResponseData updateOrder(@RequestBody SendOrderDetails order){
+        SendOrderDetails s=commonService.updateOrderStatus(order);
+        if(s==null){
+            return new ResponseData(400, order, "order could not be updated");
+        }else{
+            return new ResponseData(200, s, "order is successfully updated");
+        }
     }
+
 
 }

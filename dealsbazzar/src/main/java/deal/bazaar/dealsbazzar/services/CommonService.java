@@ -44,8 +44,6 @@ public class CommonService {
 
     private List<SystemUser> userList;
 
-   
-
     public List<SendOrderDetails> getOrders() {
         List<Product> productList = productService.getProductById(tokenUtil.getUserIdFromToken(GlobalData.token));
         List<SystemUser> userList = userService.loadUsers();
@@ -59,7 +57,7 @@ public class CommonService {
                 if (p.getProductId().equals(bid.getProductId())) {
 
                     int i = bid.getBidStatus();
-                    
+
                     // check for bids for a particular
                     if (i == 2) { // product
 
@@ -70,7 +68,7 @@ public class CommonService {
                                 bid.setUserId(s.getName()); // replace user name in place of user Id
                                 for (Order o : ordersList) {
                                     if (o.getBidId().equals(bid.getBidId())) {
-                                        SendOrderDetails so=new SendOrderDetails();
+                                        SendOrderDetails so = new SendOrderDetails();
                                         so.setBidId(o.getBidId());
                                         so.setBidderPrice(bid.getBidPrice());
                                         so.setOrderDate(o.getOrderDate());
@@ -103,20 +101,20 @@ public class CommonService {
 
         for (Bid b : bidList) {
             // replace user name in place of user Id
-                for (Order o : ordersList) {
-                    if (o.getBidId().equals(b.getBidId())) {
-                        SendOrderDetails so=new SendOrderDetails();
-                                        so.setBidId(o.getBidId());
-                                        so.setBidderPrice(b.getBidPrice());
-                                        so.setOrderDate(o.getOrderDate());
-                                        so.setOrderId(o.getOrderId());
-                                        so.setOrderStatus(o.getOrderStatus());
-                                        so.setUserName(o.getUserName());
-                                        so.setProductId(b.getProductId());
-                                        so.setStock(b.getBidStock());
-                        orderlist.add(so);
-                    }
+            for (Order o : ordersList) {
+                if (o.getBidId().equals(b.getBidId())) {
+                    SendOrderDetails so = new SendOrderDetails();
+                    so.setBidId(o.getBidId());
+                    so.setBidderPrice(b.getBidPrice());
+                    so.setOrderDate(o.getOrderDate());
+                    so.setOrderId(o.getOrderId());
+                    so.setOrderStatus(o.getOrderStatus());
+                    so.setUserName(o.getUserName());
+                    so.setProductId(b.getProductId());
+                    so.setStock(b.getBidStock());
+                    orderlist.add(so);
                 }
+            }
         }
         System.out.println(orderlist);
         if (orderlist.size() > 0) {
@@ -126,23 +124,28 @@ public class CommonService {
     }
 
     public SendOrderDetails savePayment(Payment payment, String bidId) {
-        SystemUser s= userService.getById(tokenUtil.getUserIdFromToken(GlobalData.token));
-        
+        SystemUser s = userService.getById(tokenUtil.getUserIdFromToken(GlobalData.token));
+
         List<Bid> bidList = bidService.getBids();
-        Bid bid=new Bid();
+        Bid bid = new Bid();
         for (Bid b : bidList) {
             if (b.getBidId().equals(bidId)) {
                 b.setBidStatus(2);
-                bid=bidService.updateBid(b);
+                bid = bidService.updateBid(b);
             }
         }
-        
-        //product Stock Update
-        Product p=productService.validateId(bid.getProductId());
-        int biddedStock=bid.getBidStock();
-        int existingStock=p.getProductStock();
-        int currentStock=existingStock-biddedStock;
-        p.setProductStock(currentStock);
+
+        // product Stock Update
+        Product p = productService.validateId(bid.getProductId());
+        int biddedStock = bid.getBidStock();
+        int existingStock = p.getProductStock();
+        int currentStock = existingStock - biddedStock;
+        if (currentStock != 0) {
+            p.setProductStock(currentStock);
+        } else {
+            p.setProductStock(currentStock);
+            p.setProductStatus(false);
+        }
         productService.updateProduct(p);
 
         Payment payed = paymentService.savePayment(payment);
@@ -155,17 +158,45 @@ public class CommonService {
 
             Order od = new Order();
 
-            od=orderService.addOrder(o);
-            SendOrderDetails so=new SendOrderDetails();
-                                        so.setBidId(od.getBidId());
-                                        so.setBidderPrice(bid.getBidPrice());
-                                        so.setOrderDate(od.getOrderDate());
-                                        so.setOrderId(od.getOrderId());
-                                        so.setOrderStatus(od.getOrderStatus());
-                                        so.setUserName(od.getUserName());
-                                        so.setProductId(bid.getProductId());
-                                        so.setStock(bid.getBidStock());
+            od = orderService.addOrder(o);
+            SendOrderDetails so = new SendOrderDetails();
+            so.setBidId(od.getBidId());
+            so.setBidderPrice(bid.getBidPrice());
+            so.setOrderDate(od.getOrderDate());
+            so.setOrderId(od.getOrderId());
+            so.setOrderStatus(od.getOrderStatus());
+            so.setUserName(od.getUserName());
+            so.setProductId(bid.getProductId());
+            so.setStock(bid.getBidStock());
             return so;
+        }
+        return null;
+    }
+
+    public SendOrderDetails updateOrderStatus(SendOrderDetails order) {
+        Order ord = orderService.validateId(order.getOrderId());
+        if (ord != null) {
+            if (ord.getOrderStatus().equals("shipping")) {
+                ord.setOrderStatus("cancelled");
+                orderService.updateOrder(ord);  //update order status
+                Bid bid=bidService.validateId(ord.getBidId()); //fetch bid
+                Product p=productService.validateId(order.getProductId()); //fetch product
+                if(p.isProductStatus()==false){
+                    p.setProductStatus(true);
+                    p.setProductStock(p.getProductStock()+bid.getBidStock());
+                    productService.updateProduct(p);
+                }
+                SendOrderDetails so = new SendOrderDetails();
+                so.setBidId(ord.getBidId());
+                so.setBidderPrice(bid.getBidPrice());
+                so.setOrderDate(ord.getOrderDate());
+                so.setOrderId(ord.getOrderId());
+                so.setOrderStatus(ord.getOrderStatus());
+                so.setUserName(ord.getUserName());
+                so.setProductId(bid.getProductId());
+                so.setStock(bid.getBidStock());
+                return so; //return sendOrderDetails
+            }
         }
         return null;
     }

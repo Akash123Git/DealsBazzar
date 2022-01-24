@@ -3,10 +3,13 @@ import { connect } from 'react-redux'
 import Store from '../Redux/Store'
 import * as actions from '../Redux/Action/ProductAction'
 import ProductService from '../Service/ProductService'
+import OrderService from '../Service/OrderService'
 import * as productaction from '../Redux/Action/ProductIdAction'
 import * as bidaction from '../Redux/Action/BidUserAction'
 import Navbar from '../components/Navbar'
 import { Link } from 'react-router-dom'
+import * as orderUseraction from '../Redux/Action/OrderAction'
+
 
 var mapStateToProps = state => {
     return {
@@ -19,10 +22,35 @@ var mapStateToProps = state => {
 
 class UserOrder extends React.Component {
 
+    cancelOrder=(order)=>{
+        
+        OrderService.cancelOrder(order)
+                .then(response => response.json())
+                .then(data => {
+                    bidId=data.data.bidId
+                    if (data.statusCode == 200) {
+                        Store.dispatch({
+                            ...orderUseraction.ACTION_CANCEL_ORDER, payload: {
+                                order: data.data.orderId
+                            }
+                        })
+                        var pid=data.data.productId
+                        var stock=data.data.stock
+                        Store.dispatch({
+                            ...actions.ACTION_UPDATE_PRODUCT_QUANTITY, payload: {
+                                pid: pid,
+                                stock:stock
+                            }
+                        })
+                    }
+                })
+
+    }
+
     render() {
         return <>
             <Navbar />
-            <table className="table" >
+            <table className="table table-dark table-striped" >
                 <thead>
                     <tr>
                         <th scope="col">Sl.no</th>
@@ -55,10 +83,13 @@ class UserOrder extends React.Component {
                             <td>
                                 {order.orderStatus=="shipping"?<>
                                 <button className="btn btn-info">shipping</button>
+                                <button className="btn shadow-lg rounded-pill btn-light" onClick={()=>{this.cancelOrder(order)}}>cancel order</button>
                                 </>
+                                :(order.orderStatus=="cancelled"?
+                                <button className="btn btn-dark">cancelled</button>
                                 :
-                                <button className="btn btn-info">delivered</button>
-                                }
+                                <button className="btn btn-success">delivered</button>
+                                )}
                             </td>
                         </tr>
 

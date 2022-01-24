@@ -28,12 +28,14 @@ class Pay extends Component {
         formData.append('paymentTypeId',this.paymentType.value)
         formData.append('bidderPrice',this.props.bid.bidPrice)
         formData.append('bidId',this.props.bid.bidId)
+        
         var bidId="";
         if (window.confirm("confirming payment") == true) {
             //payment transation start
             paymentService.addPayment(formData)
                 .then(response => response.json())
                 .then(data => {
+                    console.log("payment: ",data)
                     bidId=data.data.bidId
                     console.log("paymenttype: ", data)
                     if (data.statusCode == 200) {

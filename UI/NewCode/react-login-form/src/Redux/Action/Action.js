@@ -28,6 +28,6 @@ export const UPDATE_PRODUCT_BIDS="updateProductBids"
 export const LOAD_USER_ORDERS="loadOrderDetails"
 export const LOAD_ORDERS="loadOrderedDetails"
 export const ADD_ORDER="addOrder"
-export const CANCEL_ORDER="addOrder"
+export const CANCEL_ORDER="cancelOrder"
 
 export const LOGOUT="logout"

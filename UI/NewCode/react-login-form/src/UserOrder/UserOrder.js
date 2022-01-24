@@ -21,16 +21,17 @@ var mapStateToProps = state => {
 
 
 class UserOrder extends React.Component {
-
+    
     cancelOrder=(order)=>{
         
         OrderService.cancelOrder(order)
                 .then(response => response.json())
                 .then(data => {
+                    var arr=this.newOrderList(data.data)
                     if (data.statusCode == 200) {
                         Store.dispatch({
                             ...orderUseraction.ACTION_CANCEL_ORDER, payload: {
-                                order: data.data.orderId
+                                orderId: data.data.orderId
                             }
                         })
                         var pid=data.data.productId
@@ -44,6 +45,30 @@ class UserOrder extends React.Component {
                     }
                 })
 
+    }
+
+    filterProduct=(order)=>{
+        var arr=[]
+        arr=this.props.products.filter(product=>product.productId==order.productId)
+        return arr
+    }
+
+    newOrderList=(order)=>{
+        var arr=[]
+        this.props.orderList.map((ord)=>{
+            var a=order.orderId
+            var b=ord.orderId
+            if(a===b){
+                console.log(true)
+            arr.push(ord)
+            }
+            else{
+                console.log(false)
+                    arr.push(order)
+                }
+            })
+        this.setState({arr:arr})
+        return arr
     }
 
     render() {
@@ -66,8 +91,8 @@ class UserOrder extends React.Component {
                     {this.props.orderList.map((order, index) => {
                         return <tr key={index}>
                             <th scope="row">{index + 1}</th>
-                            {this.props.products.map((product) => {
-                                if (order.productId == product.productId) {
+                            {this.filterProduct(order).map((product) => {
+                                
                                     
                                     return <>
                                         <td ref={this.product=product}>{product.productName}</td>
@@ -76,7 +101,6 @@ class UserOrder extends React.Component {
                                         <td>{product.vendorPrice}</td>
                                         <td>{product.productStock}</td>
                                     </>
-                                }
                             })}
                             <td>{order.orderDate}</td>
                             <td>

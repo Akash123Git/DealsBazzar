@@ -30,9 +30,9 @@ public class PaymentController {
     private CommonService commonService;
 
     @PostMapping("/payment")
-    public ResponseData savePayment(@RequestParam String paymentTypeId,@RequestParam double bidderPrice,
-    @RequestParam String bidId)
-    {
+    public ResponseData savePayment(@RequestParam String paymentTypeId,
+    @RequestParam double bidderPrice ,@RequestParam String bidId)
+    { 
         Payment payment=new Payment();
         payment.setPaymentTypeId(paymentTypeId);
         payment.setBidderPrice(bidderPrice);

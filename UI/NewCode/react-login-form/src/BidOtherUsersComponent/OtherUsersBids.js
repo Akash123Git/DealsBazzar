@@ -47,7 +47,7 @@ class OtherUsersBids extends React.Component {
     render() {
         return <>
         
-            <table className="table" >
+            <table className="table table-success table-striped" >
                 <thead>
                     <tr>
                         <th scope="col">sl no</th>

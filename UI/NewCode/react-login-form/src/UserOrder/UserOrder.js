@@ -27,7 +27,6 @@ class UserOrder extends React.Component {
         OrderService.cancelOrder(order)
                 .then(response => response.json())
                 .then(data => {
-                    bidId=data.data.bidId
                     if (data.statusCode == 200) {
                         Store.dispatch({
                             ...orderUseraction.ACTION_CANCEL_ORDER, payload: {

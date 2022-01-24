@@ -99,7 +99,7 @@ class Product extends React.Component {
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>
 
-      <table className="table" >
+      <table className="table table-dark table-striped" >
         <thead>
           <tr>
             <th scope="col">Sl.no</th>

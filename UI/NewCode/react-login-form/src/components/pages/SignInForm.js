@@ -39,15 +39,12 @@ class SignInForm extends React.Component {
     this.state = {
       email: "",
       password: "",
-      loginStatus: false,
-      counter: 0
+      loginStatus: false
     }
   }
 
   componentDidUpdate() {
-    var i=this.state.counter
-    i=i+1
-    if(i==1){
+    
     //console.log("After Mounting: ",this.props.token)
     CategoryService.getCategories()
       .then(response => response.json())
@@ -160,7 +157,7 @@ class SignInForm extends React.Component {
         }
       })
     //fetched OrderDetails
-  }
+
 }
 
 login = (event) => {

@@ -37,7 +37,7 @@ class UserBids extends React.Component {
     render() {
         return <>
             <Navbar />
-            <table className="table" >
+            <table className="table table-success table-striped" >
                 <thead>
                     <tr>
                         <th scope="col">Sl.no</th>
